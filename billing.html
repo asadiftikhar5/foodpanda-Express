@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>foodpanda - Billing & Payment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff2b85;
+        }
+
+        .logo img {
+            width: 35px;
+            height: 35px;
+            margin-right: 8px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .billing-container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .order-summary {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .order-summary h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 20px;
+            border-bottom: 2px solid #ff2b85;
+            padding-bottom: 10px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .item-details {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .item-price {
+            font-weight: bold;
+            color: #ff2b85;
+            font-size: 16px;
+        }
+
+        .total-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .total-row.final {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ff2b85;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        .payment-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .payment-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 20px;
+            border-bottom: 2px solid #ff2b85;
+            padding-bottom: 10px;
+        }
+
+        .payment-method {
+            margin-bottom: 20px;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-option:hover {
+            border-color: #ff2b85;
+            background-color: #fef7fa;
+        }
+
+        .payment-option.selected {
+            border-color: #ff2b85;
+            background-color: #fef7fa;
+        }
+
+        .payment-option input {
+            margin-right: 12px;
+        }
+
+        .payment-option img {
+            width: 30px;
+            height: 30px;
+            margin-right: 12px;
+        }
+
+        .card-details {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .card-details.show {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 120px;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #ff2b85;
+            color: white;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            background: #e02575;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            margin-right: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .status-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .success-icon {
+            font-size: 60px;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .eta-info {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+
+        @media (max-width: 768px) {
+            .billing-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <img src="https://images.deliveryhero.io/image/foodpanda/logo/fp_logo.svg" alt="foodpanda">
+                foodpanda
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Billing & Payment</h1>
+        
+        <div class="billing-container">
+            <div class="payment-section">
+                <h3>Choose Payment Method</h3>
+                
+                <div class="payment-method">
+                    <div class="payment-option" onclick="selectPayment('cod')">
+                        <input type="radio" name="payment" id="cod" value="cod">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="COD">
+                        <label for="cod">Cash on Delivery (COD)</label>
+                    </div>
+                    
+                    <div class="payment-option" onclick="selectPayment('online')">
+                        <input type="radio" name="payment" id="online" value="online">
+                        <img src="https://cdn-icons-png.flaticon.com/512/633/633611.png" alt="Card">
+                        <label for="online">Online Payment</label>
+                    </div>
+                </div>
+
+                <div class="card-details" id="cardDetails">
+                    <div class="form-group">
+                        <label for="cardNumber">Card Number</label>
+                        <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiryDate">Expiry Date</label>
+                            <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" placeholder="123" maxlength="3">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cardName">Cardholder Name</label>
+                        <input type="text" id="cardName" placeholder="John Doe">
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" onclick="processPayment()">Place Order</button>
+            </div>
+
+            <div class="order-summary">
+                <h3>Order Summary</h3>
+                
+                <div id="orderItems">
+                    <div class="order-item">
+                        <div class="item-info">
+                            <div class="item-name">Chicken Biryani</div>
+                            <div class="item-details">Quantity: 2 | Spicy, Extra Rice</div>
+                        </div>
+                        <div class="item-price">Rs. 800</div>
+                    </div>
+                    
+                    <div class="order-item">
+                        <div class="item-info">
+                            <div class="item-name">Margherita Pizza</div>
+                            <div class="item-details">Quantity: 1 | Large, Extra Cheese</div>
+                        </div>
+                        <div class="item-price">Rs. 1200</div>
+                    </div>
+                    
+                    <div class="order-item">
+                        <div class="item-info">
+                            <div class="item-name">Chicken Karahi</div>
+                            <div class="item-details">Quantity: 1 | Medium Spicy</div>
+                        </div>
+                        <div class="item-price">Rs. 950</div>
+                    </div>
+                </div>
+                
+                <div class="total-section">
+                    <div class="total-row">
+                        <span>Subtotal:</span>
+                        <span>Rs. 2950</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Delivery Fee:</span>
+                        <span>Rs. 50</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Service Fee:</span>
+                        <span>Rs. 30</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Tax (5%):</span>
+                        <span>Rs. 148</span>
+                    </div>
+                    <div class="total-row final">
+                        <span>Total:</span>
+                        <span>Rs. 3178</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="status-popup" id="statusPopup">
+        <div class="popup-content">
+            <div class="success-icon">✓</div>
+            <h2>Order Placed Successfully!</h2>
+            <p>Your order has been confirmed and is being prepared.</p>
+            <div class="eta-info">
+                <strong>Estimated Delivery Time: 25-30 minutes</strong>
+            </div>
+            <p id="countdown">Redirecting in 10 seconds...</p>
+        </div>
+    </div>
+
+    <script>
+        function selectPayment(type) {
+            // Remove selected class from all options
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            event.currentTarget.classList.add('selected');
+            
+            // Check the radio button
+            document.getElementById(type).checked = true;
+            
+            // Show/hide card details
+            const cardDetails = document.getElementById('cardDetails');
+            if (type === 'online') {
+                cardDetails.classList.add('show');
+            } else {
+                cardDetails.classList.remove('show');
+            }
+        }
+
+        function processPayment() {
+            const selectedPayment = document.querySelector('input[name="payment"]:checked');
+            
+            if (!selectedPayment) {
+                alert('Please select a payment method');
+                return;
+            }
+            
+            if (selectedPayment.value === 'online') {
+                // Validate card details
+                const cardNumber = document.getElementById('cardNumber').value;
+                const expiryDate = document.getElementById('expiryDate').value;
+                const cvv = document.getElementById('cvv').value;
+                const cardName = document.getElementById('cardName').value;
+                
+                if (!cardNumber || !expiryDate || !cvv || !cardName) {
+                    alert('Please fill in all card details');
+                    return;
+                }
+            }
+            
+            // Show success popup
+            showOrderSuccess();
+        }
+
+        function showOrderSuccess() {
+            document.getElementById('statusPopup').style.display = 'flex';
+            
+            let countdown = 10;
+            const countdownElement = document.getElementById('countdown');
+            
+            const timer = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = `Redirecting in ${countdown} seconds...`;
+                
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    // In a real application, you would redirect to a tracking page
+                    // For now, we'll simulate going to feedback page after delivery
+                    setTimeout(() => {
+                        window.location.href = 'feedback.html';
+                    }, 1000);
+                }
+            }, 1000);
+        }
+
+        // Format card number input
+        document.getElementById('cardNumber').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+            e.target.value = formattedValue;
+        });
+
+        // Format expiry date input
+        document.getElementById('expiryDate').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            e.target.value = value;
+        });
+
+        // Only allow numbers in CVV
+        document.getElementById('cvv').addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        });
+    </script>
+</body>
+</html>

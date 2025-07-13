@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>foodpanda - Feedback</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff2b85;
+        }
+
+        .logo img {
+            width: 35px;
+            height: 35px;
+            margin-right: 8px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .feedback-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .delivery-status {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #d4edda;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+
+        .delivery-status h3 {
+            color: #155724;
+            margin-bottom: 10px;
+        }
+
+        .delivery-status p {
+            color: #155724;
+            font-size: 16px;
+        }
+
+        .feedback-section {
+            margin-bottom: 30px;
+        }
+
+        .feedback-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 20px;
+            border-bottom: 2px solid #ff2b85;
+            padding-bottom: 10px;
+        }
+
+        .rating-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .rating-label {
+            min-width: 150px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stars {
+            display: flex;
+            gap: 5px;
+        }
+
+        .star {
+            font-size: 30px;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #ffc107;
+        }
+
+        .comment-section {
+            margin-top: 25px;
+        }
+
+        .comment-section label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .comment-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #ff2b85;
+            color: white;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            background: #e02575;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            margin-right: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .success-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .success-icon {
+            font-size: 60px;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .order-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .order-info h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .order-info p {
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .rating-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .rating-label {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <img src="https://images.deliveryhero.io/image/foodpanda/logo/fp_logo.svg" alt="foodpanda">
+                foodpanda
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Order Feedback</h1>
+        
+        <div class="feedback-container">
+            <div class="delivery-status">
+                <h3>Order Delivered Successfully! 🎉</h3>
+                <p>Thank you for choosing foodpanda. We hope you enjoyed your meal!</p>
+            </div>
+
+            <div class="order-info">
+                <h4>Order Details</h4>
+                <p><strong>Order ID:</strong> FP-2025-789456</p>
+                <p><strong>Delivered at:</strong> 2:45 PM - July 3, 2025</p>
+                <p><strong>Total Amount:</strong> Rs. 3178</p>
+            </div>
+
+            <div class="feedback-section">
+                <h3>Rate Your Experience</h3>
+                
+                <div class="rating-container">
+                    <div class="rating-label">Restaurant Rating:</div>
+                    <div class="stars" data-rating="restaurant">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                </div>
+
+                <div class="rating-container">
+                    <div class="rating-label">Delivery Person:</div>
+                    <div class="stars" data-rating="delivery">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                </div>
+
+                <div class="comment-section">
+                    <label for="feedback-comment">Additional Comments (Optional):</label>
+                    <textarea 
+                        id="feedback-comment" 
+                        class="comment-textarea" 
+                        placeholder="Tell us about your experience. Your feedback helps us improve our service..."
+                    ></textarea>
+                </div>
+
+                <button class="btn btn-primary" onclick="submitFeedback()">Submit Feedback</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="success-popup" id="successPopup">
+        <div class="popup-content">
+            <div class="success-icon">✓</div>
+            <h2>Thank You!</h2>
+            <p>Your feedback has been submitted successfully.</p>
+            <p>We appreciate your valuable input!</p>
+            <button class="btn btn-primary" onclick="goToHome()" style="margin-top: 20px; width: auto; padding: 10px 20px;">Back to Home</button>
+        </div>
+    </div>
+
+    <script>
+        let ratings = {
+            restaurant: 0,
+            delivery: 0
+        };
+
+        // Handle star rating clicks
+        document.querySelectorAll('.stars').forEach(starContainer => {
+            const stars = starContainer.querySelectorAll('.star');
+            const ratingType = starContainer.getAttribute('data-rating');
+            
+            stars.forEach((star, index) => {
+                star.addEventListener('click', () => {
+                    const rating = index + 1;
+                    ratings[ratingType] = rating;
+                    
+                    // Update visual feedback
+                    stars.forEach((s, i) => {
+                        if (i < rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+                
+                // Hover effect
+                star.addEventListener('mouseenter', () => {
+                    stars.forEach((s, i) => {
+                        if (i <= index) {
+                            s.style.color = '#ffc107';
+                        } else {
+                            s.style.color = '#ddd';
+                        }
+                    });
+                });
+                
+                star.addEventListener('mouseleave', () => {
+                    stars.forEach((s, i) => {
+                        if (i < ratings[ratingType]) {
+                            s.style.color = '#ffc107';
+                        } else {
+                            s.style.color = '#ddd';
+                        }
+                    });
+                });
+            });
+        });
+
+        function submitFeedback() {
+            if (ratings.restaurant === 0 || ratings.delivery === 0) {
+                alert('Please rate both the restaurant and delivery person before submitting.');
+                return;
+            }
+
+            const comment = document.getElementById('feedback-comment').value;
+            
+            // In a real application, this would send data to the server
+            console.log('Feedback submitted:', {
+                restaurantRating: ratings.restaurant,
+                deliveryRating: ratings.delivery,
+                comment: comment,
+                orderId: 'FP-2025-789456'
+            });
+
+            // Show success popup
+            document.getElementById('successPopup').style.display = 'flex';
+        }
+
+        function goToHome() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
